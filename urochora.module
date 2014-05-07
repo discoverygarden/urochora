@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Module used to customize islandora for University of Rochester
+ */
+
+/**
+ * Always use MP4 for Video viewer.
+ */
+function urochora_process(&$variables, $hook) {
+  if ($hook == 'islandora_video') {
+    module_load_include('inc', 'islandora', 'includes/solution_packs');
+    $viewer_dsid = 'MP4';
+    $object = $variables['object'];
+
+    $video_params = array(
+      'pid' => $object->id,
+    );
+
+    if (isset($object[$viewer_dsid]) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object[$viewer_dsid])) {
+      $video_url = url("islandora/object/{$object->id}/datastream/$viewer_dsid/view");
+      $video_params += array(
+        'mime' => 'video/mp4',
+        'url' => $video_url,
+      );
+    }
+    // Thumbnail.
+    if (isset($object['TN']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['TN'])) {
+      $video_params += array(
+        'tn' => url("islandora/object/{$object->id}/datastream/TN/view", array('absolute' => TRUE)),
+      );
+    }
+    $viewer = islandora_get_viewer($video_params, 'islandora_video_viewers', $object);
+    $variables['islandora_content'] = '';
+    if ($viewer) {
+      $variables['islandora_content'] = $viewer;
+    }
+    else {
+      $variables['islandora_content'] = NULL;
+    }
+  }
+}
+
+/**
+ * Allow DNG file ext in ingest form
+ * @param array $form
+ * @param type $form_state
+ */
+function urochora_form_islandora_large_image_image_upload_form_alter(&$form, &$form_state) {
+  $form['file']['#upload_validators']['file_validate_extensions'][0] .= ' dng';
+}

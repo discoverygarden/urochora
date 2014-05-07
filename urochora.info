@@ -1,0 +1,5 @@
+name = urochora
+description = Islandora Customizations for University of Rochester
+package = Islandora customizations
+version = 7.x-dev
+core = 7.x
