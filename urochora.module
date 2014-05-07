@@ -43,9 +43,7 @@ function urochora_process(&$variables, $hook) {
 }
 
 /**
- * Allow DNG file ext in ingest form
- * @param array $form
- * @param type $form_state
+ * Allow DNG file ext in large image ingest form.
  */
 function urochora_form_islandora_large_image_image_upload_form_alter(&$form, &$form_state) {
   $form['file']['#upload_validators']['file_validate_extensions'][0] .= ' dng';
