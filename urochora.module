@@ -18,7 +18,7 @@ function urochora_process(&$variables, $hook) {
       'pid' => $object->id,
     );
 
-    if (isset($object[$viewer_dsid]) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object[$viewer_dsid])) {
+    if (isset($object[$viewer_dsid]) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object[$viewer_dsid])) {
       $video_url = url("islandora/object/{$object->id}/datastream/$viewer_dsid/view");
       $video_params += array(
         'mime' => 'video/mp4',
@@ -26,7 +26,7 @@ function urochora_process(&$variables, $hook) {
       );
     }
     // Thumbnail.
-    if (isset($object['TN']) && islandora_datastream_access(FEDORA_VIEW_OBJECTS, $object['TN'])) {
+    if (isset($object['TN']) && islandora_datastream_access(ISLANDORA_VIEW_OBJECTS, $object['TN'])) {
       $video_params += array(
         'tn' => url("islandora/object/{$object->id}/datastream/TN/view", array('absolute' => TRUE)),
       );
@@ -40,11 +40,4 @@ function urochora_process(&$variables, $hook) {
       $variables['islandora_content'] = NULL;
     }
   }
-}
-
-/**
- * Allow DNG file ext in large image ingest form.
- */
-function urochora_form_islandora_large_image_image_upload_form_alter(&$form, &$form_state) {
-  $form['file']['#upload_validators']['file_validate_extensions'][0] .= ' dng';
 }
